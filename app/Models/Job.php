@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Job extends Model
 {
+    protected $guarded = [];
+  
     /** @use HasFactory<\Database\Factories\JobFactory> */
     use HasFactory;
     public function employer()
