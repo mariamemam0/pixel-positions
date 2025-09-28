@@ -6,6 +6,8 @@ use App\Models\Job;
 use App\Http\Requests\StoreJobRequest;
 use App\Http\Requests\UpdateJobRequest;
 use App\Models\Tag;
+use App\Models\User;
+use App\Notifications\NewJobNotification;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
@@ -57,6 +59,15 @@ class JobController extends Controller
                $job->tag($tag);
            };
          }
+             \Log::info('Broadcasting job notification for job: '.$job->id);
+
+           $users = User::all();
+    foreach ($users as $user) {
+        $user->notify(new NewJobNotification($job));
+    }
+
+
+         //return dd($users);
 
          return redirect('/');
     }

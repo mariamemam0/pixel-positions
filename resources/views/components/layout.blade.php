@@ -8,9 +8,18 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600&display=swap"
         rel="stylesheet">
-    @vite('resources/css/app.css','resources/js/app.js')
+
+
+@vite(['resources/css/app.css', 'resources/js/app.js'])
+ <script>
+        window.userID = @json(auth()->check() ? auth()->id() : null);
+        console.log("Current User ID:", window.userID);
+    </script>
+
 </head>
 <body class= "bg-black text-white font-hanken-grotesk pb-20">
+<div id="notifications" class="fixed top-4 right-4 w-80 space-y-2 z-50"></div>
+
     <div class="px-10">
         <nav class="flex justify-between item-center py-4 border-b border-white/10">
            <div>
