@@ -59,8 +59,7 @@ class JobController extends Controller
                $job->tag($tag);
            };
          }
-             \Log::info('Broadcasting job notification for job: '.$job->id);
-
+            
            $users = User::all();
     foreach ($users as $user) {
         $user->notify(new NewJobNotification($job));
