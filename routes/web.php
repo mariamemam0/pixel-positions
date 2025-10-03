@@ -6,6 +6,7 @@ use App\Http\Controllers\RegisterUserController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\SessionController;
 use App\Http\Controllers\TagController;
+use App\Jobs\TestEmailJob;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
@@ -41,4 +42,9 @@ Route::middleware(['auth'])->group(function () {
     // Mark all notifications as read
     Route::patch('/notifications/read-all', [NotificationController::class, 'markAllAsRead'])
         ->name('notifications.readAll');
+});
+
+Route::get('/test-job', function () {
+    TestEmailJob::dispatch();
+    return 'Job dispatched!';
 });
