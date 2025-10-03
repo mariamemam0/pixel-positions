@@ -3,13 +3,13 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Illuminate\Contracts\Queue\ShouldQueue; // ← Add this
 use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Broadcasting\PrivateChannel;
 
-class NewJobNotification extends Notification implements ShouldBroadcast
+class NewJobNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
@@ -22,7 +22,7 @@ class NewJobNotification extends Notification implements ShouldBroadcast
 
     public function via(object $notifiable): array
     {
-        return ['database']; // Only store in DB
+        return ['database','mail']; // Only store in DB
     }
 
     public function toDatabase(object $notifiable): array
@@ -36,10 +36,14 @@ class NewJobNotification extends Notification implements ShouldBroadcast
 
     public function toMail(object $notifiable): MailMessage
     {
-        return (new MailMessage)
-            ->line('The introduction to the notification.')
-            ->action('Notification Action', url('/'))
-            ->line('Thank you for using our application!');
+          return (new MailMessage)
+        ->subject('New Job Posted')
+        ->greeting('Hello!')
+        ->line("A new job has been posted: {$this->job->title}")
+        ->line("Location: {$this->job->location}")
+        ->line("Salary: {$this->job->salary}")
+        ->action('View Job', url('/jobs/' . $this->job->id))
+        ->line('Thank you for using our application!');
     }
 
     public function toBroadcast($notifiable)
