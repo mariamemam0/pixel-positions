@@ -10,6 +10,10 @@ use App\Jobs\TestEmailJob;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Route;
 
+
+Route::get('/test', function () {
+    return view('test');
+});
 Route::get('/',[JobController::class,'index']);
 Route::get('/jobs/create',[JobController::class,'create'])->middleware('auth');
 Route::post('/jobs',[JobController::class,'store'])->middleware('auth');

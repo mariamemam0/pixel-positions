@@ -63,7 +63,7 @@ class JobController extends Controller
        $users = User::all();
 foreach ($users as $user) {
     $user->notify(new NewJobNotification($job));
-    sleep(2); // Wait 2 seconds between emails
+    //sleep(2); // Wait 2 seconds between emails
 }
 
 

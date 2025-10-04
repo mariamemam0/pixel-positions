@@ -22,7 +22,7 @@ class NewJobNotification extends Notification implements ShouldQueue
 
     public function via(object $notifiable): array
     {
-        return ['database','mail']; // Only store in DB
+        return ['database','broadcast']; // Only store in DB
     }
 
     public function toDatabase(object $notifiable): array
@@ -46,18 +46,19 @@ class NewJobNotification extends Notification implements ShouldQueue
         ->line('Thank you for using our application!');
     }
 
-    public function toBroadcast($notifiable)
+      public function toBroadcast($notifiable): BroadcastMessage
     {
         return new BroadcastMessage([
-            'message'  => "New job posted: {$this->job->title}",
-            'title'    => $this->job->title,
-            'salary'   => $this->job->salary,
-            'location' => $this->job->location,
+            'job_id' => $this->job->id,
+            'job_title' => $this->job->title,
+            'message' => 'A new job has been posted!',
         ]);
     }
 
-    public function broadcastOn()
-    {
-        return new PrivateChannel('App.Models.User.' . $this->job->user_id);
-    }
+    public function broadcastAs(): string
+{
+    return 'new.job.posted';
+}
+    
+   
 }

@@ -50,4 +50,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Employer::class);
     }
+
+    public function receivesBroadcastNotificationsOn(): string
+{
+    return 'user.' . $this->id;
+}
 }
